@@ -1,0 +1,13 @@
+GNSS_GPS = 'gps'
+GNSS_QZSS = 'qzss'
+GNSS_GLONASS = 'glo'
+GNSS_GALILEO = 'gal'
+GNSS_BEIDOU = 'bds'
+
+FORMAT_MGA = 'mga'
+FORMAT_AID = 'aid'
+
+DATATYPE_EPHEMERIS = 'eph'
+DATATYPE_ALMANAC = 'alm'
+DATATYPE_AUX = 'aux'
+DATATYPE_POS = 'pos'
