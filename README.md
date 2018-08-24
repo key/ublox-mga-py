@@ -1,4 +1,6 @@
 # pymgaclient
+[![codecov](https://codecov.io/gh/key/pymgaclient/branch/master/graph/badge.svg)](https://codecov.io/gh/key/pymgaclient)
+
 Python utilities for u-blox MultiGNSS Assitance Services
 
 
