@@ -23,7 +23,7 @@ class MGAClient(object):
 
         self.timeout = timeout
 
-    def make_parameters(self) -> dict:
+    def make_parameter(self) -> dict:
         return {
             'token': self.token,
             'datatype': self.datatype,
@@ -31,10 +31,12 @@ class MGAClient(object):
             'gnss': self.gnss,
         }
 
+    def make_encoded_parameter(self) -> str:
+        return urlencode(self.make_parameter(), safe=',')
+
     def get(self) -> Response:
         for endpoint in self._endpoints:
-            return requests.get('%s?%s' % (endpoint, urlencode(self.make_parameters(), safe=',')),
-                                timeout=self.timeout)
+            return requests.get('%s?%s' % (endpoint, self.make_encoded_parameter()), timeout=self.timeout)
 
     def save(self, filename: str) -> bool:
         response = self.get()

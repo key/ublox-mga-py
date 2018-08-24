@@ -67,7 +67,38 @@ class MGAClientTestCase(TestCase):
 
         for item in items:
             client = MGAClient(item.token, item.datatype, item.dataformat, item.gnss)
-            self.assertDictEqual(item.result, client.make_parameters())
+            self.assertDictEqual(item.result, client.make_parameter())
+
+    def test_make_encoded_parameter(self):
+        from mgaclient import MGAClient
+        from mgaclient.consts import DATATYPE_EPHEMERIS, DATATYPE_ALMANAC, DATATYPE_AUX, DATATYPE_POS
+        from mgaclient.consts import FORMAT_MGA, FORMAT_AID
+        from mgaclient.consts import GNSS_GPS, GNSS_QZSS, GNSS_BEIDOU, GNSS_GALILEO, GNSS_GLONASS
+
+        class Item:
+            def __init__(self, token, datatype, dataformat, gnss, result):
+                self.token = token
+                self.datatype = datatype
+                self.dataformat = dataformat
+                self.gnss = gnss
+
+                self.result = result
+
+        items = [
+            Item('tokenA', [DATATYPE_EPHEMERIS], FORMAT_AID, [GNSS_GPS],
+                 'token=tokenA&datatype=eph&format=aid&gnss=gps'),
+            Item('tokenB', [DATATYPE_EPHEMERIS, DATATYPE_ALMANAC], FORMAT_MGA, [GNSS_GPS, GNSS_QZSS],
+            'token=tokenB&datatype=eph,alm&format=mga&gnss=gps,qzss'),
+            Item('tokenC', [DATATYPE_EPHEMERIS, DATATYPE_ALMANAC, DATATYPE_AUX], FORMAT_MGA,
+                 [GNSS_GPS, GNSS_QZSS, GNSS_GLONASS],
+                 'token=tokenC&datatype=eph,alm,aux&format=mga&gnss=gps,qzss,glo'),
+            Item('tokenD', [DATATYPE_POS], FORMAT_MGA, [GNSS_BEIDOU, GNSS_GALILEO],
+                 'token=tokenD&datatype=pos&format=mga&gnss=bds,gal'),
+        ]
+
+        for item in items:
+            client = MGAClient(item.token, item.datatype, item.dataformat, item.gnss)
+            self.assertEqual(item.result, client.make_encoded_parameter())
 
     def test_get(self):
         with patch('requests.get', return_value=self.make_response()) as p:
