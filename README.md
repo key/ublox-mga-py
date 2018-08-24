@@ -8,6 +8,6 @@ Python utilities for u-blox MultiGNSS Assitance Services
 from pymgaclient import MGAClient
 
 client = MGAClient('SET-YOUR-TOKEN-HERE', )
-response = client.get()
+client.save('mga.bin')
 ```
 
