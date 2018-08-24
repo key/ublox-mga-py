@@ -41,7 +41,7 @@ class MGAClient(object):
         f = None
         try:
             f = open(filename, 'wb')
-            f.write(response.raw)
+            f.write(response.content)
         finally:
             if f:
                 f.close()

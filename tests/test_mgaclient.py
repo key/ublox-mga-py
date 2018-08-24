@@ -1,10 +1,26 @@
 import os
 import uuid
+from io import BytesIO
 from unittest import TestCase
 from unittest.mock import patch
 
 
 class MGAClientTestCase(TestCase):
+
+    def make_response(self):
+        from requests import Response
+
+        raw_data = b'mga binary code'
+
+        response = Response()
+        response.status_code = 200
+        response.raw = BytesIO(raw_data)
+        response.headers = {
+            'Content-Type': 'application/octet-stream',
+            'Content-Length': len(raw_data)
+        }
+
+        return response
 
     def test_make_parameters(self):
         from mgaclient import MGAClient
@@ -54,7 +70,7 @@ class MGAClientTestCase(TestCase):
             self.assertDictEqual(item.result, client.make_parameters())
 
     def test_get(self):
-        with patch('requests.get', return_value=None) as p:
+        with patch('requests.get', return_value=self.make_response()) as p:
             from mgaclient import MGAClient
 
             client = MGAClient('token', timeout=0)
@@ -65,13 +81,7 @@ class MGAClientTestCase(TestCase):
         test_filename = '%s.bin' % uuid.uuid4()
 
         try:
-            from requests import Response
-
-            response = Response
-            response.status_code = 200
-            response.raw = b'mga binary code'
-
-            with patch('requests.get', return_value=response):
+            with patch('requests.get', return_value=self.make_response()):
                 from mgaclient import MGAClient
 
                 client = MGAClient('token', timeout=0)
