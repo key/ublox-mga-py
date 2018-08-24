@@ -1,2 +1,2 @@
-# ublox-mga-py
-Python utlitities for u-blox MultiGNSS Assitance Services
+# pymgaclient
+Python utilities for u-blox MultiGNSS Assitance Services
